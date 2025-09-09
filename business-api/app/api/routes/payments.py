@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.models.payment import Payment, PaymentResponse
 
 # Создаем роутер для платежей
@@ -23,6 +23,10 @@ def get_payment(payment_id: str) -> PaymentResponse:
     """
     Возвращает информацию о конкретном платеже по его ID
     """
+    # Простая проверка - в реальном проекте здесь была бы проверка в БД
+    if not payment_id.startswith("P-"):
+        raise HTTPException(status_code=404, detail="Payment not found")
+        
     return PaymentResponse(
         id=payment_id,
         status="CONFIRMED",
